@@ -5,11 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="/static/style1.css">
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .modal.active, .modal-overlay.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="form-container">
         <h1>Login</h1>
-        <form action="/login" method="post">
+        <form action="/login" method="post" onsubmit="return validateLogin()">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>
@@ -19,5 +46,51 @@
         <p>{{ msg }}</p>
         <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
     </div>
+
+    <!-- Modal for error message -->
+    <div class="modal" id="errorModal">
+        <p>Invalid username or password. Please try again.</p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <script>
+        // Function to validate login and show modal if credentials are invalid
+        function validateLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.includes("Incorrect username/password!")) {
+                        showModal();
+                    } else {
+                        window.location.href = "/"; // Redirect to the home page on successful login
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+
+            return false; // Prevent form submission (handled by fetch)
+        }
+
+        // Function to show modal
+        function showModal() {
+            document.getElementById("errorModal").classList.add("active");
+            document.getElementById("modalOverlay").classList.add("active");
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById("errorModal").classList.remove("active");
+            document.getElementById("modalOverlay").classList.remove("active");
+        }
+    </script>
 </body>
 </html>
