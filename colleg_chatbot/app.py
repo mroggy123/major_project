@@ -11,7 +11,7 @@ app = Flask(__name__)
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'lakshmi'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'college_chatbot'
 
 mysql = MySQL(app)
@@ -122,7 +122,11 @@ def chatbot_response(user_input):
 @app.route("/")
 def index():
     if 'loggedin' in session:
-        return render_template("index.html")
+        # Fetch chat history for the user
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM chat_history WHERE user_id = %s ORDER BY timestamp', (session['id'],))
+        chat_history = cursor.fetchall()
+        return render_template("index.html", chat_history=chat_history)
     return redirect(url_for('login'))
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -177,6 +181,18 @@ def logout():
 def get_response():
     user_input = request.json.get("message")
     response = chatbot_response(user_input)
+
+    # Save user message to database
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('INSERT INTO chat_history (user_id, message, is_bot) VALUES (%s, %s, %s)',
+                   (session['id'], user_input, False))
+    mysql.connection.commit()
+
+    # Save bot response to database
+    cursor.execute('INSERT INTO chat_history (user_id, message, is_bot) VALUES (%s, %s, %s)',
+                   (session['id'], response, True))
+    mysql.connection.commit()
+
     return jsonify({"response": response})
 
 if __name__ == "__main__":

@@ -11,6 +11,13 @@
         <h1>College Enquiry Chatbot</h1>
         <div id="chat-box">
             <div class="bot-message">Hello! How can I assist you today?</div>
+            {% if chat_history %}
+                {% for chat in chat_history %}
+                    <div class="{% if chat.is_bot %}bot-message{% else %}user-message{% endif %}">
+                        {{ chat.message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="input-container">
             <input type="text" id="user-input" placeholder="Type your question here...">
