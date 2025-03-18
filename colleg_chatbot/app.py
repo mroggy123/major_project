@@ -22,9 +22,9 @@ app.secret_key = 'your_secret_key'
 
 # Define possible intents and responses
 intents = {
-    "courses": "We offer courses in Computer Science, Mechanical, Civil, and Electronics Engineering.",
+    "courses": "We offer courses in Computer Science, Mechanical, and Electronics Engineering.",
     "admission": "Admissions are open from May to July every year.",
-    "fees": "The fee structure depends on the course. Contact our office for more details.",
+    "fees": "The fee structure depends on the course.",
     #we added content
     "eligibility": "Generally, you need to have passed your 10th standard (SSLC/THSLC or equivalent) with a minimum percentage of marks (usually 35%). Some courses may have specific subject requirements (like Mathematics, Science, and English).",
     "application_process": "The application process usually involves filling out an online application form on the college website or through a common admission portal for polytechnics in Kerala. You'll need to upload scanned copies of your documents and pay the application fee online. Some colleges might also have an offline application process.",
@@ -45,18 +45,18 @@ intents = {
     "refund_policy": "Details regarding the refund policy for fees are not provided in the available sources. For comprehensive information on the refund policy, it's best to consult the college administration.",
     
     "campus_facilities": "The college offers a range of facilities to support student learning and well-being, including:\n\n- **Laboratories:** Well-equipped labs for various departments to facilitate practical learning.\n- **Library:** A resourceful library housing 2,858 titles and 8,518 volumes, along with subscriptions to 9 national and 2 international journals. :contentReference[oaicite:0]{index=0}\n- **Hostel:** Accommodation facilities are available for students.\n- **Sports Complex:** Facilities to promote physical activities and sports.\n- **Cafeteria:** Provides food services for students and staff.\n- **Auditorium:** A space for events and seminars.\n- **Gym:** Fitness facilities for students.\n- **Medical Facilities:** On-campus medical support for emergencies.\n- **Wi-Fi Campus:** Internet connectivity across the campus.",
-    "hostel_facilities": "Yes, the college provides hostel facilities for students. Specific details about the charges are not readily available. It's recommended to contact the college administration directly for the most accurate and up-to-date information regarding hostel fees.",
+    "hostel_facilities": "No, in current situation there is no hostel in the college",
     "cafeteria_mess_service": "Yes, there is a cafeteria on campus that offers food services to students and staff.",
-    "extracurricular_activities": "The college encourages students to engage in various extracurricular activities to foster holistic development. While specific clubs are not listed, students have opportunities to participate in activities such as dance, singing, art, literature, anchoring, event management, modeling, and drama. :contentReference[oaicite:1]{index=1}",
+    "extracurricular_activities": "The college encourages students to engage in various extracurricular activities to foster holistic development. While specific clubs are not listed, students have opportunities to participate in activities such as dance, singing, art, literature, anchoring, event management, modeling, and drama. ",
     "sports_facilities": "Yes, the campus includes a sports complex that provides facilities for various sports and physical activities, promoting a healthy lifestyle among students.",
     
     "placement_assistance": "Yes, Government Polytechnic College, Perumbavoor offers placement assistance to its students. The college has a dedicated placement cell that facilitates recruitment opportunities for students. :contentReference[oaicite:0]{index=0}",
     "recruiting_companies": "Specific details about the companies that visit the campus for recruitment are not readily available. For the most accurate and up-to-date information, it's recommended to contact the college's placement cell directly.",
     "placement_record": "Detailed statistics regarding the college's placement record, such as placement percentages or average salary packages, are not publicly disclosed. For comprehensive information, please reach out to the college administration or placement cell.",
   
-    "internships": "The college participates in the 'Industry on Campus' initiative, a joint program by ASAP Kerala and the Technical Education Department. This initiative aims to provide students with practical exposure and opportunities to engage in production-related activities during their course of study. :contentReference[oaicite:1]{index=1}",
+    "internships": "The college participates in the 'Industry on Campus' initiative, a joint program by ASAP Kerala and the Technical Education Department. This initiative aims to provide students with practical exposure and opportunities to engage in production-related activities during their course of study. ",
   
-    "industry_tie_ups": "Through the 'Industry on Campus' program, the college collaborates with various industries to enhance students' practical skills and employability. This initiative fosters a culture of 'Earn while Learn' by setting up micro-production units and providing hands-on training with state-of-the-art machinery. :contentReference[oaicite:2]{index=2}"
+    "industry_tie_ups": "Through the 'Industry on Campus' program, the college collaborates with various industries to enhance students' practical skills and employability. This initiative fosters a culture of 'Earn while Learn' by setting up micro-production units and providing hands-on training with state-of-the-art machinery. "
 }
 
 # Preprocess data for vectorization
@@ -114,7 +114,7 @@ def chatbot_response(user_input):
     best_match_score = similarity_scores[0][best_match_index]
 
     # Set a similarity threshold to avoid irrelevant matches
-    if best_match_score > 0.3:  # Threshold can be adjusted
+    if best_match_score > 0.5:  # Threshold can be adjusted
         return responses[best_match_index]
     else:
         return "I'm sorry, I don't understand. Can you ask something else?"
